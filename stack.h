@@ -20,4 +20,6 @@ void unstack(stack_t *s);
 
 void peek(stack_t *s);
 
+void freeStack(stack_t *s);
+
 #endif

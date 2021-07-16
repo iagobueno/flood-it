@@ -5,6 +5,7 @@
 #include <time.h>
 #include<unistd.h>
 
+//test if malloc is ok
 void mallocTest(void *p){
     if(!p){
         fprintf(stderr, "Malloc failure");
@@ -12,7 +13,8 @@ void mallocTest(void *p){
     }
 }
 
-unsigned int **allocateMatrix( unsigned int row, unsigned int column){
+// allocate a matrix in method contiguous line pointer vector
+unsigned int **createMatrix( unsigned int row, unsigned int column){
     unsigned int **new = (unsigned int **) malloc(sizeof(unsigned int*) * row);
     mallocTest(new);
 
@@ -26,7 +28,7 @@ unsigned int **allocateMatrix( unsigned int row, unsigned int column){
     return new;
 }
 
-game_t *instantiateGame(){
+game_t *createGame(){
     game_t *g = (game_t*) malloc(sizeof(game_t));
     unsigned int row, column, color;
 
@@ -35,10 +37,13 @@ game_t *instantiateGame(){
     g->column = column;
     g->row = row;
     g->color = color;
+
+    //set game status and rounds
     g->status = RUNNING;
+    g->round = 0;
 
     /*read and set the board*/
-    g->board = allocateMatrix(row, column);
+    g->board = createMatrix(row, column);
     int i ,j;
     for(i = 0; i < g->row; i++)
         for (j = 0; j < g->column; j++)
@@ -49,9 +54,13 @@ game_t *instantiateGame(){
     return g;
 }
 
-void freeMatrix(unsigned int **m){
-    free(m[0]);
-    free(m);
+unsigned int readInput(){
+
+    //read a color
+    unsigned int i;
+    fscanf(stdin, "%u", &i);
+
+    return i;
 }
 
 unsigned int currentColor(game_t *game){
@@ -59,6 +68,7 @@ unsigned int currentColor(game_t *game){
 }
 
 void flood(game_t *g, stack_t *s, unsigned int color){
+    //flood a single square on the board
     g->board[(s->r)[s->top]][(s->c)[s->top]] = color;
 }
 
@@ -96,6 +106,7 @@ void floodIt(game_t *g, unsigned int new, stack_t *s){
     stackUp(s, 0, 0);
     flood(g, s, new);
 
+    //check all neighbors and flood them
     for(;s->top >= 0;){
         if( checkNeighbor(g, s, RIGHT, curr) ){
             stackUp(s, s->r[s->top], s->c[s->top] + 1);
@@ -116,27 +127,38 @@ void floodIt(game_t *g, unsigned int new, stack_t *s){
         else
             unstack(s);
     }
-
-    // int j;
-    // for(j = 0; j < k && s->size >0 ;){
-
-    //     if( (s->a)[j] + 1 < g->row && g->board[(s->a)[j] + 1 ][(s->b)[j]] == curr){
-    //         stackUp(s, (s->a)[j] + 1, (s->b)[j], j);
-    //         j++;
-    //         flood(g, s->a[j], s->b[j], new);
-    //     }
-
-    //     else{
-    //         s->size--;
-    //         j--;
-    //     }
-    // }
 }
 
-unsigned int readInput(){
+int isOver(game_t *game){
 
-    unsigned int i;
-    fscanf(stdin, "%u", &i);
+    unsigned int curr = currentColor(game);
 
-    return i;
+    int i, j;
+    for(i = 0; i < game->row; i++){
+        for(j = 0; j < game-> column; j++){
+            if(game->board[i][j] != curr)
+                return 0;
+        }
+    }
+    return 1;
+}
+
+void gameStatus(game_t *game){
+
+    //count a round
+    game->round++;
+
+    //check if game is over
+    if(isOver(game))
+        game->status = SHUTDOWN;
+}
+
+void freeMatrix(unsigned int **m){
+    free(m[0]);
+    free(m);
+}
+
+void freeGame(game_t *game){
+    freeMatrix(game->board);
+    free(game);
 }

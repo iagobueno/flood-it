@@ -4,7 +4,7 @@
 #include "stack.h"
 
 typedef struct{
-    unsigned int row, column, color, status;
+    unsigned int row, column, color, status, round;
     unsigned int **board;
 } game_t;
 
@@ -19,11 +19,9 @@ typedef struct{
 void mallocTest(void *p);
 
 /*alloc a matrix r x c*/
-unsigned int **allocateMatrix( unsigned int row, unsigned int column);
+unsigned int **createMatrix( unsigned int row, unsigned int column);
 
-game_t *instantiateGame();
-
-void freeMatrix(unsigned int **m);
+game_t *createGame();
 
 unsigned int readInput();
 
@@ -34,5 +32,13 @@ int checkNeighbor(game_t *g, stack_t *s, int direction, unsigned int color);
 void flood(game_t *g, stack_t *s, unsigned int color);
 
 void floodIt(game_t *game, unsigned int i, stack_t *s);
+
+int isOver(game_t *game);
+
+void gameStatus(game_t *game);
+
+void freeMatrix(unsigned int **m);
+
+void freeGame(game_t *game);
 
 #endif

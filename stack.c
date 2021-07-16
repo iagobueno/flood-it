@@ -45,3 +45,9 @@ void peek(stack_t *s){
         return;
 
 }
+
+void freeStack(stack_t *s){
+    free(s->c);
+    free(s->r);
+    free(s);
+}

@@ -8,7 +8,7 @@ int main(){
 
     //read board, numbers of rows, columns and colors
     game_t *game;
-    game = instantiateGame();
+    game = createGame();
 
     //set stack
     stack_t *stack = createStack(game->row, game->column);
@@ -18,8 +18,14 @@ int main(){
     while(game->status == RUNNING){
         printScreen(game);
         floodIt(game, readInput(), stack);
+        gameStatus(game);
     }
+    printScreen(game);
 
-    freeMatrix(game->board);
+    //free and nulify
+    freeStack(stack);
+    freeGame(game);
+    stack = NULL;
+    game = NULL;
     return 0;
 }

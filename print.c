@@ -46,4 +46,5 @@ void printMatrix(unsigned int **m, unsigned int r, unsigned int c){
 
 void printScreen(game_t *game){
     printMatrix(game->board, game->row, game->column);
+    printf("rounds: %u\n", game->round);
 }
