@@ -6,7 +6,6 @@
 
 typedef struct{
     unsigned int row, column, color, status, round;
-    int **board;
 } game_t;
 
 #define SHUTDOWN 0
@@ -20,24 +19,24 @@ typedef struct{
 void mallocTest(void *p);
 
 /*alloc a matrix r x c*/
-int **createMatrix( unsigned int row, unsigned int column);
+int **createMatrix( game_t *g);
 
 game_t *createGame();
 
-unsigned int currentColor(game_t *game, unsigned int init_x, unsigned int init_y);
+void readBoard(game_t *g, int **b);
 
-int checkNeighbor(game_t *g, stack_t *s, int direction, int color);
+unsigned int currentColor(int **m, unsigned int init_x, unsigned int init_y);
 
-void flood(game_t *g, stack_t *s, int color);
+int checkNeighbor(game_t *g, int **b, stack_t *s, int direction, int color);
 
-void floodIt(game_t *g, int new, stack_t *s, unsigned int init_x, unsigned int init_y);
+void flood(int **m, stack_t *s, int color);
 
-int isOver(game_t *game);
+void floodIt(game_t *g, int **m, int new, stack_t *s, unsigned int init_x, unsigned int init_y);
 
-void gameStatus(game_t *game);
+int isOver(game_t *game, int **board);
+
+void gameStatus(game_t *game, int **board);
 
 void freeMatrix(int **m);
-
-void freeGame(game_t *game);
 
 #endif

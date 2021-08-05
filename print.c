@@ -55,7 +55,7 @@ void printArray(int *a, unsigned int size){
     printf("\n");
 }
 
-void printScreen(game_t *game){
-    printMatrix(game->board, game->row, game->column);
+void printScreen(game_t *game, int **board){
+    printMatrix(board, game->row, game->column);
     printf("rounds: %u\n", game->round);
 }

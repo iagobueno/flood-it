@@ -14,16 +14,16 @@ void mallocTest(void *p){
 }
 
 // allocate a matrix in method contiguous line pointer vector
-int **createMatrix( unsigned int row, unsigned int column){
-    int **new = (int **) malloc(sizeof(int*) * row);
+int **createMatrix( game_t *g){
+    int **new = (int **) malloc(sizeof(int*) * g->row);
     mallocTest(new);
 
-    new[0] = (int*) malloc(row * column * sizeof(int));
+    new[0] = (int*) malloc(g->row * g->column * sizeof(int));
     mallocTest(new[0]);
 
     int i;
-    for(i = 1; i < row; i++)
-        new[i] = new[0] + i * column;
+    for(i = 1; i < g->row; i++)
+        new[i] = new[0] + i * g->column;
 
     return new;
 }
@@ -41,114 +41,111 @@ game_t *createGame(){
     //set game status and rounds
     g->status = RUNNING;
     g->round = 0;
-
-    /*read and set the board*/
-    g->board = createMatrix(row, column);
-    int i ,j;
-    for(i = 0; i < g->row; i++)
-        for (j = 0; j < g->column; j++)
-            g->board[i][j] = (rand () % color) + 1;
-            // fscanf(stdin, "%u", &(g->board[i][j]));
             
     return g;
 }
 
-unsigned int currentColor(game_t *game, unsigned int init_x, unsigned int init_y){
-    return game->board[init_x][init_y];
+void readBoard(game_t *g, int **b){
+    /*read and set the board*/
+    int i ,j;
+    for(i = 0; i < g->row; i++){
+        for (j = 0; j < g->column; j++)
+            b[i][j] = (rand () % g->color) + 1;
+            // fscanf(stdin, "%u", &(g->board[i][j]));
+    }
 }
 
-void flood(game_t *g, stack_t *s, int color){
+unsigned int currentColor(int **m, unsigned int init_x, unsigned int init_y){
+    return m[init_x][init_y];
+}
+
+void flood(int **m, stack_t *s, int color){
     //flood a single square on the board
-    g->board[(s->r)[s->top]][(s->c)[s->top]] = color;
+    m[(s->r)[s->top]][(s->c)[s->top]] = color;
 }
 
-int checkNeighbor(game_t *g, stack_t *s, int direction, int color){
+int checkNeighbor(game_t *g, int **b, stack_t *s, int direction, int color){
 
     if(direction == RIGHT){
-        if(( (s->c)[s->top] + 1 < g->column) && ( g->board[ (s->r)[s->top] ][ (s->c)[s->top] + 1 ] == color ))
+        if(( (s->c)[s->top] + 1 < g->column) && ( b[ (s->r)[s->top] ][ (s->c)[s->top] + 1 ] == color ))
             return 1;
         return 0;
     }
     else if(direction == LEFT){
-        if(( (s->c)[s->top] > 0) && (g->board[ (s->r)[s->top] ][ (s->c)[s->top] - 1] == color ))
+        if(( (s->c)[s->top] > 0) && (b[ (s->r)[s->top] ][ (s->c)[s->top] - 1] == color ))
             return 1;
         return 0;
     }
     else if(direction == DOWN){
-        if(( (s->r)[s->top] + 1 < g->row) && ( g->board[ (s->r)[s->top] + 1 ][ (s->c)[s->top] ] == color ))
+        if(( (s->r)[s->top] + 1 < g->row) && ( b[ (s->r)[s->top] + 1 ][ (s->c)[s->top] ] == color ))
             return 1;
         return 0;
     }
     else{
-        if(( (s->r)[s->top] > 0) && ( g->board[ (s->r)[s->top] - 1 ][ (s->c)[s->top] ] == color ))
+        if(( (s->r)[s->top] > 0) && ( b[ (s->r)[s->top] - 1 ][ (s->c)[s->top] ] == color ))
             return 1;
         return 0;
     }
 }
 
-void floodIt(game_t *g, int new, stack_t *s, unsigned int init_x, unsigned int init_y){
+void floodIt(game_t *g, int **b, int new, stack_t *s, unsigned int init_x, unsigned int init_y){
 
-    int curr = currentColor(g, init_x, init_y);
+    int curr = currentColor(b, init_x, init_y);
 
     if(curr == new)
         return;
 
     stackUp(s, init_x, init_y);
-    flood(g, s, new);
+    flood(b, s, new);
 
     //check all neighbors and flood them
     for(;s->top >= 0;){
-        if( checkNeighbor(g, s, RIGHT, curr) ){
+        if( checkNeighbor(g, b, s, RIGHT, curr) ){
             stackUp(s, s->r[s->top], s->c[s->top] + 1);
-            flood(g, s, new);
+            flood(b, s, new);
         }
-        else if( checkNeighbor(g, s, LEFT, curr) ){
+        else if( checkNeighbor(g, b, s, LEFT, curr) ){
             stackUp(s, s->r[s->top], s->c[s->top] - 1);
-            flood(g, s, new);
+            flood(b, s, new);
         }
-        else if( checkNeighbor(g, s, DOWN, curr) ){
+        else if( checkNeighbor(g, b, s, DOWN, curr) ){
             stackUp(s, s->r[s->top] + 1, s->c[s->top]);
-            flood(g, s, new);
+            flood(b, s, new);
         }
-        else if( checkNeighbor(g, s, UP, curr) ){
+        else if( checkNeighbor(g, b, s, UP, curr) ){
             stackUp(s, s->r[s->top] - 1, s->c[s->top]);
-            flood(g, s, new);
+            flood(b, s, new);
         }
         else
             unstack(s);
     }
 }
 
-int isOver(game_t *game){
+int isOver(game_t *game, int **board){
 
-    int curr = currentColor(game, 0, 0);
+    int curr = currentColor(board, 0, 0);
 
     int i, j;
     for(i = 0; i < game->row; i++){
         for(j = 0; j < game-> column; j++){
-            if(game->board[i][j] != curr)
+            if(board[i][j] != curr)
                 return 0;
         }
     }
     return 1;
 }
 
-void gameStatus(game_t *game){
+void gameStatus(game_t *game, int **board){
 
     //count a round
     game->round++;
 
     //check if game is over
-    if(isOver(game))
+    if(isOver(game, board))
         game->status = SHUTDOWN;
 }
 
 void freeMatrix(int **m){
     free(m[0]);
     free(m);
-}
-
-void freeGame(game_t *game){
-    freeMatrix(game->board);
-    free(game);
 }

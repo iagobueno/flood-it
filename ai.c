@@ -14,42 +14,56 @@ void copyMatrix(int **dest, int **src, unsigned int r, unsigned c){
 
 }
 
-unsigned int countCluster(game_t *game){
+int countCluster(game_t *game, int **board, stack_t *stack, int new){
 
-    unsigned int row, column;
-    row = game->row;
-    column = game->column;
+    if(currentColor(board, 0, 0) == new)
+        return SIZE;
 
-    game_t *aux = createGame();
-    copyMatrix(aux->board, game->board, row, column);
-    aux->column = column;
-    aux->row = row;
-    aux->color = game->color;
+    int **aux = createMatrix(game);
+    copyMatrix(aux, board, game->row, game->column);
 
-    printMatrix(aux->board, row, column);
+    floodIt(game, aux, new, stack, 0, 0);
 
-    // int i, j;
-    // for(i = 0; i < row; i++){
-    //     for(j = 0; j < column; j++){
-    //         if(aux->board[i][j] >= 0);
+    unsigned int count = 0;
+    int i, j;
+    for(i = 0; i < game->row; i++){
+        for(j = 0; j < game->column; j++){
+            if(aux[i][j] >= 0){
+                floodIt(game, aux, aux[i][j]*(-1), stack, i, j);
+                count++;
+            }
+        }
+    }
 
-    //     }
-    // }
-
-    freeGame(aux);
-    return 1;
+    freeMatrix(aux);
+    return count;
 }
 
-int chooseMove(int *result, int colors, int i){
+int chooseMove(game_t *game, int **board, stack_t *stack, int *result){
 
-    //chooses a color
-    int c;
     // c = rand () % colors + 1;
-    scanf("%d", &c);
+
+    // unsigned int *heu = malloc(sizeof(unsigned int) * game->color);
+
+    int i, min, c = 1, cluster;
+    min = countCluster(game, board, stack, 1);
+    
+    printf("c: %d ", min);
+
+    for(i = 2; i <= game->color; i++){
+        cluster = countCluster(game, board, stack, i);
+        printf("%d ", cluster);
+
+        if (min > cluster){
+            min = cluster;
+            c = i;
+        }
+    }
+    printf("heu:%d \n", c);
 
     //stores the choosed color
-    if(i < SIZE)
-        result[i] = c;
+    if(game->round < SIZE)
+        result[game->round] = c;
 
-    return c; 
+    return c;
 }

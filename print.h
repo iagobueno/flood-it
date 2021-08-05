@@ -19,6 +19,6 @@ void printArray(int *a, unsigned int size);
 
 void color(int c);
 
-void printScreen(game_t *game);
+void printScreen(game_t *game, int **board);
 
 #endif

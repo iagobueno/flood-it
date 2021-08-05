@@ -2,8 +2,8 @@
 #define AI
 #include "game.h"
 
-unsigned int countCluster(game_t *game);
+int countCluster(game_t *game, int **board, stack_t *stack, int color);
 
-int chooseMove(int *result, int colors, int i);
+int chooseMove(game_t *game, int **board, stack_t *stack, int *result);
 
 #endif
