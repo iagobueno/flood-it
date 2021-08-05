@@ -25,6 +25,15 @@ void color(int c){
         case 7 :
             printf(CYAN);
             break;
+        case 8 :
+            printf(GRAY);
+            break;
+        case 9 :
+            printf(HRED);
+            break;
+        case 10 :
+            printf(HYEL);
+            break;
         default :
             printf(BLACK);
             break;

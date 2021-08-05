@@ -48,9 +48,7 @@ int distance(game_t *game, int **board, stack_t *stack, int new){
     floodIt(game, aux, 0, stack, 0, 0);
     // printMatrix(aux, game->row, game->column);
 
-    unsigned int count = 0;
     int i = 0, j, up, left, min = 0;
-
     //mesmo for do for abaixo, mas rodas apenas para a linha 1 pra reduzir a quantidade de ifs
     for(j = 0; j < game->column; j++){
         if(aux[i][j] > 0){
@@ -59,8 +57,8 @@ int distance(game_t *game, int **board, stack_t *stack, int new){
                 left = abs(aux[i][j-1]) + 1;
             }
 
-            floodIt(game, aux, left*(-1), stack, i, j);
-            count++;
+            // floodIt(game, aux, left*(-1), stack, i, j);
+            aux[i][j] = left*(-1);
             // printMatrix(aux, game->row, game->column);
         }
     }
@@ -70,7 +68,6 @@ int distance(game_t *game, int **board, stack_t *stack, int new){
             if(aux[i][j] > 0){
 
                 up = abs(aux[i-1][j]);
-
                 if(j > 0){
                     left = abs(aux[i][j-1]);
                 }
@@ -80,8 +77,8 @@ int distance(game_t *game, int **board, stack_t *stack, int new){
 
                 min = minimum(up, left) + 1;
                 
-                floodIt(game, aux, min*(-1), stack, i, j);
-                count++;
+                aux[i][j] = min*(-1);
+                // floodIt(game, aux, min*(-1), stack, i, j);
                 // printMatrix(aux, game->row, game->column);
             }
         }
@@ -91,7 +88,6 @@ int distance(game_t *game, int **board, stack_t *stack, int new){
     int co = aux[game->row-1][game->column-1];
 
     // printMatrix(aux, game->row, game->column);
-    // printf("Clusters: %d\n", count);
     freeMatrix(aux);
     return co*(-1);
 }
