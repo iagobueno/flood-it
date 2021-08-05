@@ -17,7 +17,7 @@ void copyMatrix(int **dest, int **src, unsigned int r, unsigned c){
 int countCluster(game_t *game, int **board, stack_t *stack, int new){
 
     if(currentColor(board, 0, 0) == new)
-        return SIZE;
+        return 32000;
 
     int **aux = createMatrix(game);
     copyMatrix(aux, board, game->row, game->column);
