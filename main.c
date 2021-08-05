@@ -23,12 +23,14 @@ int main(){
     //set stack
     stack_t *stack = createStack(game->row, game->column);
 
-    //run the game
+    // countCluster(game, board, stack, 3);
+
+    // run the game
     while(game->status == RUNNING){
         printScreen(game, board);
         floodIt(game, board, chooseMove(game, board, stack, result), stack, 0, 0);
         gameStatus(game, board);
-        sleep(1);
+        // sleep(1);
     }
     printScreen(game, board);
     printArray(result, game->round);

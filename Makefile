@@ -28,9 +28,13 @@ purge: clean
 	@$(RM) $(OUTPUT)
 
 run:
-	@./main
+	@./main < simple.txt
 
-v:
-	@valgrind ./main
+fabi:
+	@./main < exemplo_mapa_30_30_10.txt
+
+val:
+	@valgrind ./main < simple.txt
+
 gdb:
 	@gdb ./main

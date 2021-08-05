@@ -41,6 +41,7 @@ void printMatrix(int **m, unsigned int r, unsigned int c){
             color(m[i][j]);
         printf("\n");
     }
+    printf("\n");
     printf(BLACK);
 
 }

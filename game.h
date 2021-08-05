@@ -3,6 +3,7 @@
 #define GAME_H
 #define SIZE 300
 #include "stack.h"
+#define INT_MAX 2147483647
 
 typedef struct{
     unsigned int row, column, color, status, round;
