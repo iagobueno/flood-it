@@ -2,7 +2,7 @@
 #include "game.h"
 #include <stdio.h>
 
-void color(unsigned int c){
+void color(int c){
     switch (c){
         case 1 :
             printf(RED);
@@ -30,10 +30,11 @@ void color(unsigned int c){
             break;
     }
 
-    printf("%u ", c);
+    printf("%d ", c);
+    // printf("▀ ");
 }
 
-void printMatrix(unsigned int **m, unsigned int r, unsigned int c){
+void printMatrix(int **m, unsigned int r, unsigned int c){
     int i, j;
     for (i = 0; i < r; i++){
         for (j = 0; j < c; j++)
@@ -42,6 +43,16 @@ void printMatrix(unsigned int **m, unsigned int r, unsigned int c){
     }
     printf(BLACK);
 
+}
+
+void printArray(int *a, unsigned int size){
+    int i;
+
+    printf("resultado: ");
+
+    for(i = 0; i<size; i++)
+        printf("%d ", a[i]);
+    printf("\n");
 }
 
 void printScreen(game_t *game){

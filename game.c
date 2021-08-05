@@ -14,11 +14,11 @@ void mallocTest(void *p){
 }
 
 // allocate a matrix in method contiguous line pointer vector
-unsigned int **createMatrix( unsigned int row, unsigned int column){
-    unsigned int **new = (unsigned int **) malloc(sizeof(unsigned int*) * row);
+int **createMatrix( unsigned int row, unsigned int column){
+    int **new = (int **) malloc(sizeof(int*) * row);
     mallocTest(new);
 
-    new[0] = (unsigned int*) malloc(row * column * sizeof(unsigned int));
+    new[0] = (int*) malloc(row * column * sizeof(int));
     mallocTest(new[0]);
 
     int i;
@@ -30,9 +30,9 @@ unsigned int **createMatrix( unsigned int row, unsigned int column){
 
 game_t *createGame(){
     game_t *g = (game_t*) malloc(sizeof(game_t));
-    unsigned int row, column, color;
-
+    
     /*read and set the numbers of columns, rows and colors*/
+    unsigned int row, column, color;
     fscanf(stdin, "%u %u %u", &row, &column, &color);
     g->column = column;
     g->row = row;
@@ -49,30 +49,20 @@ game_t *createGame(){
         for (j = 0; j < g->column; j++)
             g->board[i][j] = (rand () % color) + 1;
             // fscanf(stdin, "%u", &(g->board[i][j]));
-
-    
+            
     return g;
 }
 
-unsigned int readInput(){
-
-    //read a color
-    unsigned int i;
-    fscanf(stdin, "%u", &i);
-
-    return i;
+unsigned int currentColor(game_t *game, unsigned int init_x, unsigned int init_y){
+    return game->board[init_x][init_y];
 }
 
-unsigned int currentColor(game_t *game){
-    return game->board[0][0];
-}
-
-void flood(game_t *g, stack_t *s, unsigned int color){
+void flood(game_t *g, stack_t *s, int color){
     //flood a single square on the board
     g->board[(s->r)[s->top]][(s->c)[s->top]] = color;
 }
 
-int checkNeighbor(game_t *g, stack_t *s, int direction, unsigned int color){
+int checkNeighbor(game_t *g, stack_t *s, int direction, int color){
 
     if(direction == RIGHT){
         if(( (s->c)[s->top] + 1 < g->column) && ( g->board[ (s->r)[s->top] ][ (s->c)[s->top] + 1 ] == color ))
@@ -96,14 +86,14 @@ int checkNeighbor(game_t *g, stack_t *s, int direction, unsigned int color){
     }
 }
 
-void floodIt(game_t *g, unsigned int new, stack_t *s){
+void floodIt(game_t *g, int new, stack_t *s, unsigned int init_x, unsigned int init_y){
 
-    unsigned int curr = currentColor(g);
+    int curr = currentColor(g, init_x, init_y);
 
     if(curr == new)
         return;
 
-    stackUp(s, 0, 0);
+    stackUp(s, init_x, init_y);
     flood(g, s, new);
 
     //check all neighbors and flood them
@@ -131,7 +121,7 @@ void floodIt(game_t *g, unsigned int new, stack_t *s){
 
 int isOver(game_t *game){
 
-    unsigned int curr = currentColor(game);
+    int curr = currentColor(game, 0, 0);
 
     int i, j;
     for(i = 0; i < game->row; i++){
@@ -153,7 +143,7 @@ void gameStatus(game_t *game){
         game->status = SHUTDOWN;
 }
 
-void freeMatrix(unsigned int **m){
+void freeMatrix(int **m){
     free(m[0]);
     free(m);
 }

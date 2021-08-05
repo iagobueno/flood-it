@@ -13,9 +13,11 @@
 #define CYAN "\033[1;36m" 
 #define BLACK "\033[1;30m"
 
-void printMatrix(unsigned int **m, unsigned int r, unsigned int c);
+void printMatrix(int **m, unsigned int r, unsigned int c);
 
-void color(unsigned int c);
+void printArray(int *a, unsigned int size);
+
+void color(int c);
 
 void printScreen(game_t *game);
 

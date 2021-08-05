@@ -1,6 +1,6 @@
 CC = gcc -g
 RM = rm -f
-OBJS = main.o game.o print.o stack.o
+OBJS = main.o game.o print.o stack.o ai.o
 OUTPUT = main
 
 all: $(OBJS)
@@ -8,6 +8,9 @@ all: $(OBJS)
 
 main.o: main.c
 	$(CC) -c main.c
+
+ai.o: ai.c ai.h
+	$(CC) -c ai.c
 
 print.o: print.c print.h game.h
 	$(CC) -c print.c

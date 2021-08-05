@@ -1,11 +1,12 @@
 /*library that is responsible for basic game structures*/
 #ifndef GAME_H
 #define GAME_H
+#define SIZE 300
 #include "stack.h"
 
 typedef struct{
     unsigned int row, column, color, status, round;
-    unsigned int **board;
+    int **board;
 } game_t;
 
 #define SHUTDOWN 0
@@ -19,25 +20,23 @@ typedef struct{
 void mallocTest(void *p);
 
 /*alloc a matrix r x c*/
-unsigned int **createMatrix( unsigned int row, unsigned int column);
+int **createMatrix( unsigned int row, unsigned int column);
 
 game_t *createGame();
 
-unsigned int readInput();
+unsigned int currentColor(game_t *game, unsigned int init_x, unsigned int init_y);
 
-unsigned int currentColor(game_t *game);
+int checkNeighbor(game_t *g, stack_t *s, int direction, int color);
 
-int checkNeighbor(game_t *g, stack_t *s, int direction, unsigned int color);
+void flood(game_t *g, stack_t *s, int color);
 
-void flood(game_t *g, stack_t *s, unsigned int color);
-
-void floodIt(game_t *game, unsigned int i, stack_t *s);
+void floodIt(game_t *g, int new, stack_t *s, unsigned int init_x, unsigned int init_y);
 
 int isOver(game_t *game);
 
 void gameStatus(game_t *game);
 
-void freeMatrix(unsigned int **m);
+void freeMatrix(int **m);
 
 void freeGame(game_t *game);
 
