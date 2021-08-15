@@ -23,14 +23,14 @@ int main(){
     //set stack
     stack_t *stack = createStack(game->row, game->column);
 
-    // distance(game, board, stack, 3);
+    // diagonal(game, board, stack, 3);
 
     // run the game
     while(game->status == RUNNING){
         printScreen(game, board);
         floodIt(game, board, chooseMove(game, board, stack, result), stack, 0, 0);
         gameStatus(game, board);
-        sleep(3);
+        // sleep(1);
     }
     printScreen(game, board);
     printArray(result, game->round);

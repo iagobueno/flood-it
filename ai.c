@@ -5,6 +5,7 @@
 #include <string.h>
 #include <stdio.h>
 
+//copy the source matrix to the destiny matrix
 void copyMatrix(int **dest, int **src, unsigned int r, unsigned c){
     int i, j;
     for(i = 0; i < r; i++){
@@ -14,26 +15,14 @@ void copyMatrix(int **dest, int **src, unsigned int r, unsigned c){
 
 }
 
+//checks the minimun between a and b
 int minimum(int a, int b){
     if(a > b)
         return b;
     return a;
 }
 
-int corner(int a, int b, int c){
-
-    int min = a;
-
-    if(min > b)
-        min = b;
-
-    if(min > c)
-        min = c;
-
-    return min;
-}
-
-int distance(game_t *game, int **board, stack_t *stack, int new){
+int diagonal(game_t *game, int **board, stack_t *stack, int new, int *zero){
     if(currentColor(board, 0, 0) == new)
         return 32000;
 
@@ -48,8 +37,20 @@ int distance(game_t *game, int **board, stack_t *stack, int new){
     floodIt(game, aux, 0, stack, 0, 0);
     // printMatrix(aux, game->row, game->column);
 
-    int i = 0, j, up, left, min = 0;
+    //conta tamanho do cluster pela contagem de zeros
+    *(zero) = 0;
+    int i, j;
+    for(i = 0; i < game->row; i++ ){
+        for(j = 0; j < game->column; j++){
+            if( aux[i][j] == 0)
+                *(zero)++;
+        }
+    }
+    printf("\nZEROS: %d\n", *(zero));
+
     //mesmo for do for abaixo, mas rodas apenas para a linha 1 pra reduzir a quantidade de ifs
+    int up, left, min = 0;
+    i = 0;
     for(j = 0; j < game->column; j++){
         if(aux[i][j] > 0){
 
@@ -97,15 +98,20 @@ int countCluster(game_t *game, int **board, stack_t *stack, int new){
     if(currentColor(board, 0, 0) == new)
         return 32000;
 
+    // create a temporary matrix
     int **aux = createMatrix(game);
     copyMatrix(aux, board, game->row, game->column);
 
+    // flood it with zeros
     floodIt(game, aux, new, stack, 0, 0);
 
     unsigned int count = 0;
     int i, j;
     for(i = 0; i < game->row; i++){
         for(j = 0; j < game->column; j++){
+
+            // flood a cluster with zero and count one
+            // and don't count the zeros clusters
             if(aux[i][j] >= 0){
                 floodIt(game, aux, aux[i][j]*(-1), stack, i, j);
                 count++;
@@ -123,13 +129,15 @@ int chooseMove(game_t *game, int **board, stack_t *stack, int *result){
 
     // unsigned int *heu = malloc(sizeof(unsigned int) * game->color);
 
-    int i, min, c = 1, heu;
-    min = countCluster(game, board, stack, 1) + distance(game, board, stack, i);
-    
+    int i, min, c = 1, heu, zero;
+    min = countCluster(game, board, stack, 1) + diagonal(game, board, stack, i, &zero);
+    min -= zero;
+
     printf("c: %d ", min);
 
     for(i = 2; i <= game->color; i++){
-        heu = countCluster(game, board, stack, i) + distance(game, board, stack, i);
+        heu = countCluster(game, board, stack, i) + diagonal(game, board, stack, i, &zero);
+        heu-= zero;
         printf("%d ", heu);
 
         if (min > heu){

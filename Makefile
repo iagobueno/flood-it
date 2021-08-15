@@ -30,6 +30,9 @@ purge: clean
 run:
 	@./main < simple.txt
 
+time:
+	@./main < time.txt
+
 fabi:
 	@./main < exemplo_mapa_30_30_10.txt
 

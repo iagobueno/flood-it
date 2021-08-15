@@ -8,4 +8,6 @@ int distance(game_t *game, int **board, stack_t *stack, int new);
 
 int chooseMove(game_t *game, int **board, stack_t *stack, int *result);
 
+int diagonal(game_t *game, int **board, stack_t *stack, int new, int *zero);
+
 #endif
