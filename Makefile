@@ -37,7 +37,7 @@ fabi:
 	@./main < exemplo_mapa_30_30_10.txt
 
 val:
-	@valgrind ./main < simple.txt
+	@valgrind --leak-check=full ./main < simple.txt
 
 gdb:
 	@gdb ./main

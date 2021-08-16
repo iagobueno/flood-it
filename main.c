@@ -10,7 +10,7 @@
 
 int main(){
 
-    // srand(time(NULL));
+    srand(time(NULL));
 
     //read board, numbers of rows, columns and colors;
     game_t *game = createGame();
@@ -20,6 +20,9 @@ int main(){
     //result array
     unsigned int *result = malloc(sizeof(unsigned int) * SIZE);
 
+    //color count array
+    unsigned int *color_count = countColors(game, board);
+
     //set stack
     stack_t *stack = createStack(game->row, game->column);
 
@@ -28,7 +31,7 @@ int main(){
     // run the game
     while(game->status == RUNNING){
         printScreen(game, board);
-        floodIt(game, board, chooseMove(game, board, stack, result), stack, 0, 0);
+        floodIt(game, board, chooseMove(game, board, stack, result, color_count), stack, 0, 0);
         gameStatus(game, board);
         // sleep(1);
     }
@@ -40,5 +43,6 @@ int main(){
     freeMatrix(board);
     free(game);
     free(result);
+    free(color_count);
     return 0;
 }

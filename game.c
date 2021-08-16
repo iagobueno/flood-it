@@ -50,8 +50,8 @@ void readBoard(game_t *g, int **b){
     int i ,j;
     for(i = 0; i < g->row; i++){
         for (j = 0; j < g->column; j++)
-            // b[i][j] = (rand () % g->color) + 1;
-            fscanf(stdin, "%u", &(b[i][j]));
+            b[i][j] = (rand () % g->color) + 1;
+            // fscanf(stdin, "%u", &(b[i][j]));
     }
 }
 
