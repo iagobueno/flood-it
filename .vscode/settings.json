@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "game.h": "c",
-        "stdlib.h": "c"
+        "stdlib.h": "c",
+        "fianqueto.h": "c"
     }
 }

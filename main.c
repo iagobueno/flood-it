@@ -3,14 +3,12 @@
 #include "stack.h"
 #include "game.h"
 #include "print.h"
-#include "ai.h"
+#include "fianqueto.h"
 #include <unistd.h>
 #include <stdlib.h>
 #include<time.h>
 
 int main(){
-
-    srand(time(NULL));
 
     //read board, numbers of rows, columns and colors;
     game_t *game = createGame();
@@ -25,8 +23,6 @@ int main(){
 
     //set stack
     stack_t *stack = createStack(game->row, game->column);
-
-    // diagonal(game, board, stack, 3);
 
     // run the game
     while(game->status == RUNNING){

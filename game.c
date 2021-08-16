@@ -55,12 +55,13 @@ void readBoard(game_t *g, int **b){
     }
 }
 
+// returns the color of the choosed coordenate
 unsigned int currentColor(int **m, unsigned int init_x, unsigned int init_y){
     return m[init_x][init_y];
 }
 
+//flood a single square on the board
 void flood(int **m, stack_t *s, int color){
-    //flood a single square on the board
     m[(s->r)[s->top]][(s->c)[s->top]] = color;
 }
 

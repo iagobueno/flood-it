@@ -16,11 +16,11 @@
 #define HRED "\e[0;91m"
 #define HYEL "\e[0;93m"
 
+void color(int c);
+
 void printMatrix(int **m, unsigned int r, unsigned int c);
 
 void printArray(int *a, unsigned int size);
-
-void color(int c);
 
 void printScreen(game_t *game, int **board);
 

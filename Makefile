@@ -1,6 +1,6 @@
 CC = gcc -g
 RM = rm -f
-OBJS = main.o game.o print.o stack.o ai.o
+OBJS = main.o game.o print.o stack.o fianqueto.o
 OUTPUT = main
 
 all: $(OBJS)
@@ -9,8 +9,8 @@ all: $(OBJS)
 main.o: main.c
 	$(CC) -c main.c
 
-ai.o: ai.c ai.h
-	$(CC) -c ai.c
+fianqueto.o: fianqueto.c fianqueto.h
+	$(CC) -c fianqueto.c
 
 print.o: print.c print.h game.h
 	$(CC) -c print.c
@@ -26,18 +26,3 @@ clean:
 
 purge: clean
 	@$(RM) $(OUTPUT)
-
-run:
-	@./main < simple.txt
-
-time:
-	@./main < time.txt
-
-fabi:
-	@./main < exemplo_mapa_30_30_10.txt
-
-val:
-	@valgrind --leak-check=full ./main < simple.txt
-
-gdb:
-	@gdb ./main

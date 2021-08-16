@@ -1,5 +1,5 @@
-#ifndef AI
-#define AI
+#ifndef FIANQUETO_H
+#define FIANQUETO_H
 #include "game.h"
 
 int countCluster(game_t *game, int **board, stack_t *stack, int color);

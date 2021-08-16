@@ -1,0 +1,70 @@
+
+###flood-it-inteligencia-artificial
+
+##introdução
+
+Este txt tem como objetivo explicar as estratégias implementadas na inteligência
+ artificial, carinhosamente batizada de Fianqueto.
+
+##heurística
+
+Há duas formas de mensurar o tabuleiro, pela função diagonal e pela função
+countCluster. A heurística em questão é uma soma destas duas medidas:
+
+h = número de clusters + distância da diagonal
+
+O Fianqueto sempre joga de forma a tentar minimizar a heurística, isto é,
+diminuir o número de clusters e reduzir a distância do cluster principal
+até o outro lado do mapa, abrindo a diagonal principal.
+
+# diagonal
+
+Esta estratégia tenta abrir o tabuleiro na diagonal principal. A função diagonal
+foi implementada de modo a sempre calcular a distância do cluster principal até
+a posição [n][n] do tabuleiro.
+
+A função cria um tabuleiro auxiliar e preenche o cluster principal com 0. Se um
+elemento é igual ou menor que 0, a função sabe que este já foi calculado e segue
+para o próximo elemento. Assim, a função percorre a matriz de modo a comparar os
+elementos acima e à esquerda do elemento atual, escolhe o menor deles, soma um,
+e atribui para o elemento, multiplicando por -1.
+
+Deste modo, esta matriz exemplo, terminaria desta forma:
+
+1 1 1 2         0  0  0 -1
+2 2 2 2        -1 -1 -1 -2
+3 3 3 3        -2 -2 -2 -3
+
+Então, a função diagonal retorna a última posição da matriz em módulo. Neste
+caso, retornando 3.
+
+# contagem-de-clusters
+
+A função conta a quantidade de clusters no tabuleiro. Cria um tabuleiro auxiliar
+e o percorre de forma a preencher os clusters com 0, e soma 1 na contagem. Deste
+modo, se acha um elemento 0, sabe que este já foi contado, e segue para o próximo.
+
+## previsão no futuro
+
+O Fianqueto é esperto o suficiente para olhar uma jogada no futuro.
+Por questões de otimização, ele não testa todas as possíveis jogadas do no futuro.
+Antes de jogar o jogo, percorre o tabuleiro e conta quais são as 10 cores que mais
+aparecem.
+
+O Fianqueto cria um tabuleiro auxiliar e pinta com uma cor. Para este tabuleiro
+auxiliar, já pintado com uma cor, ele checa se uma das 10 cores tem a possibilidade
+de ser uma ótima jogada no futuro.
+
+##fianqueto
+
+O nome Fianqueto surgiu por dois motivos:
+
+Primeiro, FIA como um acrônimo para flood-it inteligência artificial.
+
+E também, no xadrez, fianqueto é um padrão de desenvolvimento de peças onde um bispo
+é desenvolvido na segunda linha da coluna do cavalo adjacente, depois do peão do cavalo
+ter sido avançado uma ou duas casas, de modo a cobrir a diagonal principal.
+
+Como parte da estratégia desse programa é baseada em abrir a diagonal principal,
+achei que ficaria bacana.
+
